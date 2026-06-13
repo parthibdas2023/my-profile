@@ -159,11 +159,15 @@
         .instagram { background-color: #E1306C; }
         .linkedin { background-color: #0077B5; }
         
+        /* [THREADS BUG FIX] ব্যাকগ্রাউন্ড সাদা এবং ভেতরের আইকনটি ১০০% কালো ফিক্স করা হয়েছে */
         .threads { 
-            background-color: #ffffff; 
-            color: #000000 !important;
-            border: 1px solid #e2e8f0;
+            background-color: #ffffff !important; 
+            border: 1px solid #ccd1d9 !important;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .threads i {
+            color: #000000 !important; /* ভেতরের আইকনটি কালো করতে বাধ্য করবে */
         }
 
         .about-section {
@@ -254,7 +258,7 @@
         }
 
         .academic-dropdown.active .academic-content {
-            border: 2px solid #0d1b2a; /* পুরো টেবিল কন্টেনারের বর্ডার মোটা করা হয়েছে */
+            border: 2px solid #0d1b2a; 
             border-top: none;
         }
 
@@ -263,13 +267,12 @@
             overflow-x: auto;
         }
 
-        /* [TABLE UPDATE] নতুন কালারফুল ও মোটা বর্ডার ডিজাইন */
         .academic-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 12px;
             text-align: left;
-            min-width: 380px; /* কলাম বাড়ায় টেবিলের মিনিমাম উইডথ বাড়ানো হয়েছে যেন মোবাইলেও স্ক্রল করে সুন্দর দেখা যায় */
+            min-width: 380px; 
             border: 2px solid #0d1b2a;
         }
 
@@ -278,7 +281,7 @@
             color: white;
             padding: 12px 10px;
             font-weight: 600;
-            border: 2px solid #0d1b2a; /* মোটা বর্ডার */
+            border: 2px solid #0d1b2a; 
             text-transform: uppercase;
             font-size: 11px;
             letter-spacing: 0.5px;
@@ -286,7 +289,7 @@
 
         .academic-table td {
             padding: 12px 10px;
-            border: 2px solid #0d1b2a; /* ভেতরের প্রতিটি ঘরের বর্ডার মোটা করা হয়েছে */
+            border: 2px solid #0d1b2a; 
             color: #2d3748;
             line-height: 1.4;
             font-weight: 500;
@@ -297,12 +300,12 @@
         }
         
         .academic-table tr:hover {
-            background-color: #edf2f7; /* মাউস নিলে হালকা কালার চেঞ্জ হবে */
+            background-color: #edf2f7; 
         }
 
         .badge-inst-new {
             font-size: 11px;
-            color: #c5a880; /* গোল্ডেন প্রফেশনাল কালার */
+            color: #c5a880; 
             font-weight: 600;
         }
 
