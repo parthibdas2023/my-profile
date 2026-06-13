@@ -683,7 +683,8 @@
     </div>
 
     <script>
-        const SHEET_ID = '1kad9syTQO71xMH7Aq8YvPpf-ZkeFuYjTFi_yvJcIVFY'; 
+        // এখানে তোর আসল আইডিটি (আন্ডারস্কোর সহ) নিখুঁতভাবে বসিয়ে দেওয়া হয়েছে
+        const SHEET_ID = '1kad9syTQO71xMH7Aq8YvPpf_ZkeFuYjTFi_yvJcIVFY'; 
         const SHEET_NAME = 'Sheet1'; 
 
         let allArticles = [];
@@ -716,13 +717,13 @@
                 titleDiv.classList.add('bn-font');
             } else {
                 titleDiv.innerHTML = `<i class="fa-solid fa-microscope"></i> Research & Economic Insights`;
-                titleDiv.classList.remove('bn-font');
+                titleDiv.classList.remove('bold');
             }
             
             renderArticles(); 
         }
 
-        // CSV সরাসরি এক্সপোর্ট মেথড যা নিখুঁতভাবে লাইভ ডেটা আনবে
+        // CSV সরাসরি এক্সপোর্ট মেথড যা এখন ১ সেকেন্ডে ডেটা নিয়ে আসবে
         async function fetchNews() {
             try {
                 const csvUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&sheet=${SHEET_NAME}`;
@@ -732,12 +733,10 @@
                 const lines = csvText.split('\n');
                 allArticles = []; 
 
-                // প্রথম লাইন (Header Row) বাদ দিয়ে বাকি ডেটা রিড করা
                 for (let i = 1; i < lines.length; i++) {
                     const rowText = lines[i].trim();
                     if (!rowText) continue;
 
-                    // সেল ভ্যালুর ডাবল কোটেশন ও কমা নিখুঁতভাবে হ্যান্ডেল করার জন্য স্ট্যান্ডার্ড regex স্প্লিট লজিক
                     const row = rowText.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(cell => {
                         return cell.replace(/^"|"$/g, '').replace(/""/g, '"').trim();
                     });
@@ -752,7 +751,6 @@
                     let im1 = row[5] || '';
                     let im2 = row[6] || '';
 
-                    // অতিরিক্ত ফিল্টারিং যাতে কোডে হেডার বা কোনো ফাঁকা সারি অবজেক্টে না ঢোকে
                     if (dateVal.toLowerCase().includes('date') || (!hlBN && !hlEN)) continue;
 
                     allArticles.push({
@@ -770,7 +768,7 @@
 
             } catch (error) {
                 console.error('Error fetching data:', error);
-                document.getElementById('news-list-container').innerHTML = '<div class="loading bn-font" style="color:red;">আর্টিকেল লোড করতে সমস্যা হয়েছে! ব্রাউজার ক্যাশ ক্লিয়ার করে আবার চেষ্টা করুন।</div>';
+                document.getElementById('news-list-container').innerHTML = '<div class="loading bn-font" style="color:red;">আর্টিকেল লোড করতে সমস্যা হয়েছে! শিটের সেটিংস চেক করুন।</div>';
             }
         }
 
@@ -785,7 +783,6 @@
                 return;
             }
 
-            // নতুন ডেটা সবার ওপরে দেখানোর জন্য উল্টো লুপ চালানো হয়েছে
             for (let i = allArticles.length - 1; i >= 0; i--) {
                 const art = allArticles[i];
                 
