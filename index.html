@@ -683,11 +683,8 @@
     </div>
 
     <script>
-        // আপনার ওয়েব পাবলিশ করা আসল শিটের আইডিটি পারফেক্টলি সেট করা হলো
         const SHEET_ID = '1kad9syTQO71xMH7Aq8YvPpf-ZkeFuYjTFi_yvJcIVFY'; 
         const SHEET_NAME = 'Sheet1'; 
-
-        const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
 
         let allArticles = [];
         let currentLang = 'EN'; 
@@ -725,36 +722,38 @@
             renderArticles(); 
         }
 
-        // [UPGRADED ENGINE] ডেটা রিডিং মেকানিজম সম্পূর্ণ আপডেট ও শক্তিশালী করা হলো
+        // CSV সরাসরি এক্সপোর্ট মেথড যা নিখুঁতভাবে লাইভ ডেটা আনবে
         async function fetchNews() {
             try {
-                const response = await fetch(url);
-                const text = await response.text();
+                const csvUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&sheet=${SHEET_NAME}`;
+                const response = await fetch(csvUrl);
+                const csvText = await response.text();
                 
-                // গুগলের পাঠানো JSON ফরম্যাট রিড করা হচ্ছে
-                const jsonData = JSON.parse(text.substr(47).slice(0, -2));
-                const rows = jsonData.table.rows;
-                
+                const lines = csvText.split('\n');
                 allArticles = []; 
 
-                for (let i = 0; i < rows.length; i++) {
-                    const row = rows[i];
-                    if (!row || !row.c) continue; 
-                    
-                    // ১ম সারির হেডার ডিটেক্ট করে স্কিপ করা
-                    let firstCell = row.c[0] ? (row.c[0].v + '').toLowerCase() : '';
-                    if (firstCell.includes('date')) continue;
+                // প্রথম লাইন (Header Row) বাদ দিয়ে বাকি ডেটা রিড করা
+                for (let i = 1; i < lines.length; i++) {
+                    const rowText = lines[i].trim();
+                    if (!rowText) continue;
 
-                    // ফাঁকা ঘর ও কলাম অবজেক্ট সেফটি ভ্যালিডেশন (A2 থেকে G2 ক্র্যাশ প্রতিরোধক)
-                    let dateVal = row.c[0] ? (row.c[0].f || row.c[0].v || '') : '';
-                    let hlBN = row.c[1] ? (row.c[1].v || '') : '';
-                    let ctBN = row.c[2] ? (row.c[2].v || '') : '';
-                    let hlEN = row.c[3] ? (row.c[3].v || '') : '';
-                    let ctEN = row.c[4] ? (row.c[4].v || '') : '';
-                    let im1 = row.c[5] ? (row.c[5].v || '') : '';
-                    let im2 = row.c[6] ? (row.c[6].v || '') : '';
+                    // সেল ভ্যালুর ডাবল কোটেশন ও কমা নিখুঁতভাবে হ্যান্ডেল করার জন্য স্ট্যান্ডার্ড regex স্প্লিট লজিক
+                    const row = rowText.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(cell => {
+                        return cell.replace(/^"|"$/g, '').replace(/""/g, '"').trim();
+                    });
 
-                    if(!hlBN && !hlEN) continue; 
+                    if (row.length < 3) continue;
+
+                    let dateVal = row[0] || '';
+                    let hlBN = row[1] || '';
+                    let ctBN = row[2] || '';
+                    let hlEN = row[3] || '';
+                    let ctEN = row[4] || '';
+                    let im1 = row[5] || '';
+                    let im2 = row[6] || '';
+
+                    // অতিরিক্ত ফিল্টারিং যাতে কোডে হেডার বা কোনো ফাঁকা সারি অবজেক্টে না ঢোকে
+                    if (dateVal.toLowerCase().includes('date') || (!hlBN && !hlEN)) continue;
 
                     allArticles.push({
                         date: dateVal,
@@ -771,11 +770,10 @@
 
             } catch (error) {
                 console.error('Error fetching data:', error);
-                document.getElementById('news-list-container').innerHTML = '<div class="loading bn-font" style="color:red;">আর্টিকেল লোড করতে সমস্যা হয়েছে! শিটের শেয়ারিং সেটিংস এবং নাম চেক করুন।</div>';
+                document.getElementById('news-list-container').innerHTML = '<div class="loading bn-font" style="color:red;">আর্টিকেল লোড করতে সমস্যা হয়েছে! ব্রাউজার ক্যাশ ক্লিয়ার করে আবার চেষ্টা করুন।</div>';
             }
         }
 
-        // [DOUBLE IMAGE SUPPORT] একসাথে ২টা ছবি আপ-ডাউন করে শো করার জন্য রেন্ডারার
         function renderArticles() {
             const newsListContainer = document.getElementById('news-list-container');
             newsListContainer.innerHTML = ''; 
@@ -787,6 +785,7 @@
                 return;
             }
 
+            // নতুন ডেটা সবার ওপরে দেখানোর জন্য উল্টো লুপ চালানো হয়েছে
             for (let i = allArticles.length - 1; i >= 0; i--) {
                 const art = allArticles[i];
                 
@@ -797,13 +796,11 @@
                 const contentClass = isBengali(displayContent) ? 'bn-font' : '';
                 const dateClass = isBengali(art.date) ? 'bn-font' : '';
 
-                // প্রথম ছবির কন্ডিশন (F কলাম)
                 let imageTag1 = '';
                 if (art.img1 && art.img1.trim() !== '') {
                     imageTag1 = `<img src="${art.img1}" alt="Research Image 1" style="width:100%; max-height:220px; object-fit:cover; border-radius:8px; margin-bottom:14px; display:block;">`;
                 }
 
-                // দ্বিতীয় ছবির কন্ডিশন (G কলাম)
                 let imageTag2 = '';
                 if (art.img2 && art.img2.trim() !== '') {
                     imageTag2 = `<img src="${art.img2}" alt="Research Image 2" style="width:100%; max-height:220px; object-fit:cover; border-radius:8px; margin-top:14px; display:block;">`;
