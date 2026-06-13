@@ -683,7 +683,7 @@
     </div>
 
     <script>
-        // [FIXED] সঠিক শিট আইডিটি হাইফেনসহ বসল
+        // আপনার ওয়েব পাবলিশ করা আসল শিটের আইডিটি পারফেক্টলি সেট করা হলো
         const SHEET_ID = '1kad9syTQO71xMH7Aq8YvPpf-ZkeFuYjTFi_yvJcIVFY'; 
         const SHEET_NAME = 'Sheet1'; 
 
@@ -725,11 +725,13 @@
             renderArticles(); 
         }
 
+        // [UPGRADED ENGINE] ডেটা রিডিং মেকানিজম সম্পূর্ণ আপডেট ও শক্তিশালী করা হলো
         async function fetchNews() {
             try {
                 const response = await fetch(url);
                 const text = await response.text();
                 
+                // গুগলের পাঠানো JSON ফরম্যাট রিড করা হচ্ছে
                 const jsonData = JSON.parse(text.substr(47).slice(0, -2));
                 const rows = jsonData.table.rows;
                 
@@ -737,16 +739,31 @@
 
                 for (let i = 0; i < rows.length; i++) {
                     const row = rows[i];
-                    if(!row.c[1]) continue; 
+                    if (!row || !row.c) continue; 
+                    
+                    // ১ম সারির হেডার ডিটেক্ট করে স্কিপ করা
+                    let firstCell = row.c[0] ? (row.c[0].v + '').toLowerCase() : '';
+                    if (firstCell.includes('date')) continue;
+
+                    // ফাঁকা ঘর ও কলাম অবজেক্ট সেফটি ভ্যালিডেশন (A2 থেকে G2 ক্র্যাশ প্রতিরোধক)
+                    let dateVal = row.c[0] ? (row.c[0].f || row.c[0].v || '') : '';
+                    let hlBN = row.c[1] ? (row.c[1].v || '') : '';
+                    let ctBN = row.c[2] ? (row.c[2].v || '') : '';
+                    let hlEN = row.c[3] ? (row.c[3].v || '') : '';
+                    let ctEN = row.c[4] ? (row.c[4].v || '') : '';
+                    let im1 = row.c[5] ? (row.c[5].v || '') : '';
+                    let im2 = row.c[6] ? (row.c[6].v || '') : '';
+
+                    if(!hlBN && !hlEN) continue; 
 
                     allArticles.push({
-                        date: row.c[0] ? row.c[0].f || row.c[0].v : '',
-                        headlineBN: row.c[1] ? row.c[1].v : '',
-                        contentBN: row.c[2] ? row.c[2].v : '',
-                        headlineEN: row.c[3] ? row.c[3].v : '',
-                        contentEN: row.c[4] ? row.c[4].v : '',
-                        img1: row.c[5] ? row.c[5].v : '',
-                        img2: row.c[6] ? row.c[6].v : ''
+                        date: dateVal,
+                        headlineBN: hlBN,
+                        contentBN: ctBN,
+                        headlineEN: hlEN,
+                        contentEN: ctEN,
+                        img1: im1,
+                        img2: im2
                     });
                 }
 
@@ -758,6 +775,7 @@
             }
         }
 
+        // [DOUBLE IMAGE SUPPORT] একসাথে ২টা ছবি আপ-ডাউন করে শো করার জন্য রেন্ডারার
         function renderArticles() {
             const newsListContainer = document.getElementById('news-list-container');
             newsListContainer.innerHTML = ''; 
@@ -779,14 +797,16 @@
                 const contentClass = isBengali(displayContent) ? 'bn-font' : '';
                 const dateClass = isBengali(art.date) ? 'bn-font' : '';
 
+                // প্রথম ছবির কন্ডিশন (F কলাম)
                 let imageTag1 = '';
                 if (art.img1 && art.img1.trim() !== '') {
-                    imageTag1 = `<img src="${art.img1}" alt="Research Image" style="width:100%; max-height:220px; object-fit:cover; border-radius:8px; margin-bottom:14px; display:block;">`;
+                    imageTag1 = `<img src="${art.img1}" alt="Research Image 1" style="width:100%; max-height:220px; object-fit:cover; border-radius:8px; margin-bottom:14px; display:block;">`;
                 }
 
+                // দ্বিতীয় ছবির কন্ডিশন (G কলাম)
                 let imageTag2 = '';
                 if (art.img2 && art.img2.trim() !== '') {
-                    imageTag2 = `<img src="${art.img2}" alt="Research Image" style="width:100%; max-height:220px; object-fit:cover; border-radius:8px; margin-top:14px; display:block;">`;
+                    imageTag2 = `<img src="${art.img2}" alt="Research Image 2" style="width:100%; max-height:220px; object-fit:cover; border-radius:8px; margin-top:14px; display:block;">`;
                 }
 
                 const autoKeywords = displayHeadline.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").split(" ").join(", ");
