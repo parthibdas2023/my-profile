@@ -3,74 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parthib - Social Links</title>
+    <title>Parthib Das - Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #74ebd5 0%, #9face6 100%);
+            background-color: #f7f9fa;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0;
-            color: #333;
+            padding: 20px;
         }
 
         .profile-card {
             background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             text-align: center;
-            width: 300px;
+            width: 100%;
+            max-width: 400px;
+            overflow: hidden;
+            padding-bottom: 35px;
+            position: relative;
+        }
+
+        /* উপরের গাঢ় নীল ব্যাকগ্রাউন্ড এবং কার্ভ */
+        .card-header {
+            background-color: #0d1b2a;
+            height: 180px;
+            position: relative;
+            border-bottom-left-radius: 50% 20%;
+            border-bottom-right-radius: 50% 20%;
+        }
+
+        /* বড় প্রোফাইল পিকচার কন্টেইনার */
+        .img-container {
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: white;
+            padding: 8px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
 
         .profile-img {
-            width: 120px;
-            height: 120px;
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
-            margin-bottom: 15px;
-            border: 4px solid #74ebd5;
             object-fit: cover;
         }
 
-        h2 { margin: 10px 0; color: #444; }
+        /* টেক্সট কন্টেন্ট এরিয়া */
+        .card-body {
+            margin-top: 70px;
+            padding: 0 25px;
+        }
+
+        h2 {
+            font-size: 32px;
+            color: #0d1b2a;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .designation {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #c5a880; /* ছবির মতো গোল্ডেন/ব্রোঞ্জ কালার */
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .divider {
+            width: 50px;
+            height: 2px;
+            background-color: #0d1b2a;
+            margin: 0 auto 25px auto;
+        }
+
+        /* যোগাযোগের তথ্য (ইমেইল ও ফোন) */
+        .contact-info {
+            margin-bottom: 25px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            color: #4a5568;
+            font-size: 15px;
+            text-decoration: none;
+        }
+
+        .contact-item i {
+            color: #c5a880;
+            font-size: 16px;
+        }
+
+        /* সোশ্যাল মিডিয়া লিঙ্ক বাটনসমূহ */
+        .social-links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
 
         .social-link {
-            display: block;
-            margin: 12px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
             padding: 12px;
             text-decoration: none;
             color: white;
-            font-weight: bold;
-            border-radius: 10px;
+            font-weight: 600;
+            border-radius: 12px;
             transition: all 0.3s ease;
+            font-size: 15px;
         }
 
         .social-link:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            opacity: 0.9;
         }
 
-        .facebook { background-color: #4267B2; }
-        .instagram { background-color: #C13584; }
-        .linkedin { background-color: #0077b5; }
+        /* সোশ্যাল মিডিয়া ব্র্যান্ড কালার */
+        .facebook { background-color: #1877F2; }
+        .instagram { background-color: #E1306C; }
+        .linkedin { background-color: #0077B5; }
         .threads { background-color: #000000; }
-        .gmail { background-color: #D44638; }
+        .gmail { background-color: #EA4335; }
     </style>
 </head>
 <body>
 
     <div class="profile-card">
-        <img src="https://i.ibb.co.com/N6QZR81Q/IMG-20260608-WA0009.jpg" alt="Parthib" class="profile-img">
+        <div class="card-header"></div>
         
-        <h2>Parthib</h2>
+        <div class="img-container">
+            <img src="https://i.ibb.co.com/N6QZR81Q/IMG-20260608-WA0009.jpg" alt="Parthib Das" class="profile-img">
+        </div>
         
-        <a href="https://www.facebook.com/parthibdas2023" class="social-link facebook" target="_blank">Facebook</a>
-        <a href="https://www.instagram.com/parthib_2023" class="social-link instagram" target="_blank">Instagram</a>
-        <a href="https://www.linkedin.com/in/parthib-das" class="social-link linkedin" target="_blank">LinkedIn</a>
-        <a href="https://www.threads.net/@parthib_2023" class="social-link threads" target="_blank">Threads</a>
-        <a href="mailto:parthibdas.eco@gmail.com" class="social-link gmail">Gmail</a>
+        <div class="card-body">
+            <h2>Parthib Das</h2>
+            <div class="designation">Data Entry Expert</div>
+            
+            <div class="divider"></div>
+            
+            <div class="contact-info">
+                <a href="mailto:parthibdas.eco@gmail.com" class="contact-item">
+                    <i class="fa-regular fa-envelope"></i>
+                    <span>parthibdas.eco@gmail.com</span>
+                </a>
+                <a href="tel:01406903532" class="contact-item">
+                    <i class="fa-solid fa-mobile-screen-button"></i>
+                    <span>01406903532</span>
+                </a>
+            </div>
+            
+            <div class="social-links-container">
+                <a href="https://www.facebook.com/parthibdas2023" class="social-link facebook" target="_blank">
+                    <i class="fa-brands fa-facebook-f"></i> Facebook
+                </a>
+                <a href="https://www.instagram.com/parthib_2023" class="social-link instagram" target="_blank">
+                    <i class="fa-brands fa-instagram"></i> Instagram
+                </a>
+                <a href="https://www.linkedin.com/in/parthib-das" class="social-link linkedin" target="_blank">
+                    <i class="fa-brands fa-linkedin-in"></i> LinkedIn
+                </a>
+                <a href="https://www.threads.net/@parthib_2023" class="social-link threads" target="_blank">
+                    <i class="fa-brands fa-threads"></i> Threads
+                </a>
+                <a href="mailto:parthibdas.eco@gmail.com" class="social-link gmail">
+                    <i class="fa-regular fa-envelope"></i> Gmail
+                </a>
+            </div>
+        </div>
     </div>
 
 </body>
