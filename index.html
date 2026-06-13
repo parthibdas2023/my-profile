@@ -14,7 +14,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f7f9fa;
+            background-color: #f3f4f6;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -28,32 +28,32 @@
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             text-align: center;
             width: 100%;
-            max-width: 400px;
+            max-width: 430px;
             overflow: hidden;
             padding-bottom: 35px;
             position: relative;
         }
 
-        /* উপরের গাঢ় নীল ব্যাকগ্রাউন্ড এবং কার্ভ */
+        /* কার্ডের উপরের নেভি ব্লু কার্ভ ব্যাকগ্রাউন্ড */
         .card-header {
             background-color: #0d1b2a;
-            height: 180px;
+            height: 160px;
             position: relative;
             border-bottom-left-radius: 50% 20%;
             border-bottom-right-radius: 50% 20%;
         }
 
-        /* বড় প্রোফাইল পিকচার কন্টেইনার */
+        /* প্রফেশনাল বড় ছবি */
         .img-container {
             position: absolute;
-            top: 50px;
+            top: 40px;
             left: 50%;
             transform: translateX(-50%);
-            width: 180px;
-            height: 180px;
+            width: 170px;
+            height: 170px;
             border-radius: 50%;
             background: white;
-            padding: 8px;
+            padding: 6px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
 
@@ -64,38 +64,41 @@
             object-fit: cover;
         }
 
-        /* টেক্সট কন্টেন্ট এরিয়া */
+        /* মূল কন্টেন্ট এরিয়া */
         .card-body {
-            margin-top: 70px;
+            margin-top: 65px;
             padding: 0 25px;
         }
 
         h2 {
-            font-size: 32px;
+            font-size: 30px;
             color: #0d1b2a;
             font-weight: 700;
             margin-bottom: 5px;
         }
 
         .designation {
-            font-size: 14px;
+            font-size: 13px;
             text-transform: uppercase;
             letter-spacing: 2px;
-            color: #c5a880; /* ছবির মতো গোল্ডেন/ব্রোঞ্জ কালার */
+            color: #c5a880; /* আকর্ষণীয় গোল্ডেন কালার */
             font-weight: 600;
             margin-bottom: 15px;
         }
 
         .divider {
-            width: 50px;
+            width: 40px;
             height: 2px;
             background-color: #0d1b2a;
-            margin: 0 auto 25px auto;
+            margin: 0 auto 20px auto;
         }
 
-        /* যোগাযোগের তথ্য (ইমেইল ও ফোন) */
+        /* ইমেইল এবং ফোন নাম্বার */
         .contact-info {
             margin-bottom: 25px;
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 15px;
         }
 
         .contact-item {
@@ -103,51 +106,137 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            margin-bottom: 10px;
+            margin: 6px 0;
             color: #4a5568;
-            font-size: 15px;
+            font-size: 14px;
             text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .contact-item:hover {
+            color: #c5a880;
         }
 
         .contact-item i {
             color: #c5a880;
-            font-size: 16px;
-        }
-
-        /* সোশ্যাল মিডিয়া লিঙ্ক বাটনসমূহ */
-        .social-links-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .social-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 12px;
-            text-decoration: none;
-            color: white;
-            font-weight: 600;
-            border-radius: 12px;
-            transition: all 0.3s ease;
             font-size: 15px;
         }
 
-        .social-link:hover {
+        /* সোশ্যাল মিডিয়া ছোট বাটনসমূহ (পাশাপাশি সাজানো) */
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 40px;
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .social-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
             opacity: 0.9;
         }
 
-        /* সোশ্যাল মিডিয়া ব্র্যান্ড কালার */
         .facebook { background-color: #1877F2; }
         .instagram { background-color: #E1306C; }
         .linkedin { background-color: #0077B5; }
         .threads { background-color: #000000; }
-        .gmail { background-color: #EA4335; }
+
+        /* About Me সেকশন */
+        .about-section {
+            text-align: left;
+            margin-bottom: 30px;
+            background: #fdfdfd;
+            border-left: 4px solid #c5a880;
+            padding: 15px;
+            border-radius: 0 15px 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+
+        .section-title {
+            font-size: 16px;
+            color: #0d1b2a;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title i {
+            color: #c5a880;
+        }
+
+        .about-text {
+            font-size: 13.5px;
+            color: #555;
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        /* সার্টিফিকেট সেকশন (একদম নিচে) */
+        .certificate-section {
+            text-align: left;
+            margin-top: 10px;
+        }
+
+        .cert-buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .cert-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #0d1b2a;
+            color: white;
+            padding: 12px 15px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13.5px;
+            transition: all 0.3s ease;
+            border: 1px solid #0d1b2a;
+        }
+
+        .cert-button:hover {
+            background: white;
+            color: #0d1b2a;
+            border: 1px solid #0d1b2a;
+            transform: translateX(4px);
+        }
+
+        .cert-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cert-left i {
+            color: #c5a880;
+            font-size: 16px;
+        }
+
+        .cert-button .fa-arrow-right {
+            font-size: 12px;
+            opacity: 0.7;
+        }
     </style>
 </head>
 <body>
@@ -162,7 +251,6 @@
         <div class="card-body">
             <h2>Parthib Das</h2>
             <div class="designation">Data Entry Expert</div>
-            
             <div class="divider"></div>
             
             <div class="contact-info">
@@ -176,23 +264,61 @@
                 </a>
             </div>
             
-            <div class="social-links-container">
-                <a href="https://www.facebook.com/parthibdas2023" class="social-link facebook" target="_blank">
-                    <i class="fa-brands fa-facebook-f"></i> Facebook
+            <div class="social-grid">
+                <a href="https://www.facebook.com/parthibdas2023" class="social-btn facebook" target="_blank" title="Facebook">
+                    <i class="fa-brands fa-facebook-f"></i>
                 </a>
-                <a href="https://www.instagram.com/parthib_2023" class="social-link instagram" target="_blank">
-                    <i class="fa-brands fa-instagram"></i> Instagram
+                <a href="https://www.instagram.com/parthib_2023" class="social-btn instagram" target="_blank" title="Instagram">
+                    <i class="fa-brands fa-instagram"></i>
                 </a>
-                <a href="https://www.linkedin.com/in/parthib-das" class="social-link linkedin" target="_blank">
-                    <i class="fa-brands fa-linkedin-in"></i> LinkedIn
+                <a href="https://www.linkedin.com/in/parthib-das" class="social-btn linkedin" target="_blank" title="LinkedIn">
+                    <i class="fa-brands fa-linkedin-in"></i>
                 </a>
-                <a href="https://www.threads.net/@parthib_2023" class="social-link threads" target="_blank">
-                    <i class="fa-brands fa-threads"></i> Threads
-                </a>
-                <a href="mailto:parthibdas.eco@gmail.com" class="social-link gmail">
-                    <i class="fa-regular fa-envelope"></i> Gmail
+                <a href="https://www.threads.net/@parthib_2023" class="social-btn threads" target="_blank" title="Threads">
+                    <i class="fa-brands fa-threads"></i>
                 </a>
             </div>
+
+            <div class="about-section">
+                <div class="section-title">
+                    <i class="fa-solid fa-user"></i> About Me
+                </div>
+                <p class="about-text">
+                    Hi, I am Parthib Das. I am a highly detail-oriented and dedicated Data Entry Specialist. I expert in web research, data mining, and organizing data using MS Excel and Google Sheets. My primary goal is to deliver 100% accurate, error-free, and high-quality work within the deadline. I am ready to help you manage your data and save your valuable time. Let’s connect to discuss your project.
+                </p>
+            </div>
+            
+            <div class="certificate-section">
+                <div class="section-title">
+                    <i class="fa-solid fa-award"></i> Certificates
+                </div>
+                <div class="cert-buttons-container">
+                    <a href="https://drive.google.com/file/d/1-OMdSXfOysKsyVec3dttUPaBPYPVdPLw/view?usp=drivesdk" class="cert-button" target="_blank">
+                        <div class="cert-left">
+                            <i class="fa-solid fa-brain"></i>
+                            <span>Basics of Artificial Intelligence</span>
+                        </div>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                    
+                    <a href="https://drive.google.com/file/d/1Mdhuj_A94x1gf-kJgfA72L0YAnOfHAtL/view?usp=drivesdk" class="cert-button" target="_blank">
+                        <div class="cert-left">
+                            <i class="fa-solid fa-keyboard"></i>
+                            <span>Data Entry Freelancing</span>
+                        </div>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                    
+                    <a href="https://drive.google.com/file/d/1N3rSNkklYx2xa2yunW4vlcwXNwHoPFLq/view?usp=drivesdk" class="cert-button" target="_blank">
+                        <div class="cert-left">
+                            <i class="fa-solid fa-comments"></i>
+                            <span>Presentation & Public Speaking</span>
+                        </div>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
         </div>
     </div>
 
