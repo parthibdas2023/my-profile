@@ -159,7 +159,6 @@
         .instagram { background-color: #E1306C; }
         .linkedin { background-color: #0077B5; }
         
-        /* [THREADS STYLE UPDATE] বর্ডার আরও স্মুথ ও ক্লিন করা হয়েছে */
         .threads { 
             background-color: #ffffff !important; 
             border: 1px solid #ccd1d9 !important;
@@ -364,23 +363,56 @@
             border-radius: 25px;
             padding: 24px 20px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            position: relative;
+        }
+
+        .news-header-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #f3f4f6;
+            padding-bottom: 10px;
+            margin-bottom: 18px;
         }
 
         .news-section-title {
             font-size: 18px;
             color: #0d1b2a;
             font-weight: 700;
-            margin-bottom: 18px;
             display: flex;
             align-items: center;
             gap: 10px;
-            border-bottom: 2px solid #f3f4f6;
-            padding-bottom: 10px;
             letter-spacing: 0.5px;
         }
 
         .news-section-title i {
             color: #c5a880; 
+        }
+
+        .lang-switch-btn {
+            background: #0d1b2a;
+            color: white;
+            border: 1px solid #c5a880;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .lang-switch-btn:hover {
+            background: #c5a880;
+            color: #0d1b2a;
+            border-color: #0d1b2a;
+        }
+
+        .lang-switch-btn i {
+            font-size: 13px;
         }
 
         .news-list {
@@ -564,7 +596,7 @@
                                 <tr>
                                     <td><strong>SSC</strong><br><span style="font-size:10px; color:#718096; font-weight:bold;">Science</span></td>
                                     <td>2020</td>
-                                    <td>G B D High School Institute</td>
+                                    <td>G B D High School</td>
                                     <td><span class="badge-inst-new">Jessore Board</span></td>
                                 </tr>
                             </tbody>
@@ -640,19 +672,27 @@
     </div>
 
     <div class="news-container">
-        <div class="news-section-title">
-            <i class="fa-solid fa-microscope"></i> Research & Economic Insights
+        <div class="news-header-wrapper">
+            <div class="news-section-title" id="sec-title">
+                <i class="fa-solid fa-microscope"></i> Research & Economic Insights
+            </div>
+            <button class="lang-switch-btn" onclick="toggleLanguage()">
+                <i class="fa-solid fa-earth-americas"></i> <span id="lang-btn-text">বাংলা</span>
+            </button>
         </div>
         <div id="news-list-container" class="news-list">
-            <div class="loading bn-font">আর্টিকেল লোড হচ্ছে, দয়া করে অপেক্ষা করুন...</div>
+            <div class="loading bn-font" id="loading-msg">আর্টিকেল লোড হচ্ছে, দয়া করে অপেক্ষা করুন...</div>
         </div>
     </div>
 
     <script>
-        const SHEET_ID = 'আপনার_গুগল_শিট_আইডি_এখানে_বসাবেন'; 
+        const SHEET_ID = '1kad9syTQO71xMH7Aq8YvPpf-ZkeFuYjTFi_yvJcIVFY'; 
         const SHEET_NAME = 'Sheet1'; 
 
         const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
+
+        let allArticles = [];
+        let currentLang = 'EN'; 
 
         function toggleAcademic() {
             const dropdown = document.getElementById('academicSection');
@@ -671,6 +711,22 @@
             return banglaRegex.test(text);
         }
 
+        function toggleLanguage() {
+            currentLang = (currentLang === 'EN') ? 'BN' : 'EN';
+            document.getElementById('lang-btn-text').innerText = (currentLang === 'EN') ? 'বাংলা' : 'English';
+            
+            const titleDiv = document.getElementById('sec-title');
+            if(currentLang === 'BN') {
+                titleDiv.innerHTML = `<i class="fa-solid fa-microscope"></i> অর্থনৈতিক গবেষণা ও প্রবন্ধ`;
+                titleDiv.classList.add('bn-font');
+            } else {
+                titleDiv.innerHTML = `<i class="fa-solid fa-microscope"></i> Research & Economic Insights`;
+                titleDiv.classList.remove('bn-font');
+            }
+            
+            renderArticles(); 
+        }
+
         async function fetchNews() {
             try {
                 const response = await fetch(url);
@@ -679,81 +735,83 @@
                 const jsonData = JSON.parse(text.substr(47).slice(0, -2));
                 const rows = jsonData.table.rows;
                 
-                const newsListContainer = document.getElementById('news-list-container');
-                newsListContainer.innerHTML = ''; 
+                allArticles = []; 
 
-                if(rows.length === 0) {
-                    newsListContainer.innerHTML = '<div class="loading bn-font">কোনো আর্টিকেল পাওয়া যায়নি।</div>';
-                    return;
-                }
-
-                for (let i = rows.length - 1; i >= 0; i--) {
+                for (let i = 0; i < rows.length; i++) {
                     const row = rows[i];
-                    
-                    const date = row.c[0] ? row.c[0].f || row.c[0].v : '';
-                    const headline = row.c[1] ? row.c[1].v : '';
-                    const content = row.c[2] ? row.c[2].v : '';
-                    
-                    const imageUrl1 = row.c[3] ? row.c[3].v : ''; 
-                    const imageUrl2 = row.c[4] ? row.c[4].v : ''; 
+                    if(!row.c[1]) continue; 
 
-                    if(!headline) continue; 
-
-                    const headlineClass = isBengali(headline) ? 'bn-font' : '';
-                    const contentClass = isBengali(content) ? 'bn-font' : '';
-                    const dateClass = isBengali(date) ? 'bn-font' : '';
-
-                    let imageTag1 = '';
-                    if (imageUrl1 && imageUrl1.trim() !== '') {
-                        imageTag1 = `<img src="${imageUrl1}" alt="${headline}" style="width:100%; max-height:220px; object-fit:cover; border-radius:8px; margin-bottom:14px; display:block;">`;
-                    }
-
-                    let imageTag2 = '';
-                    if (imageUrl2 && imageUrl2.trim() !== '') {
-                        imageTag2 = `<img src="${imageUrl2}" alt="${headline}" style="width:100%; max-height:220px; object-fit:cover; border-radius:8px; margin-top:14px; display:block;">`;
-                    }
-
-                    const autoKeywords = headline.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").split(" ").join(", ");
-
-                    const newsItem = document.createElement('div');
-                    newsItem.className = 'news-item';
-                    newsItem.setAttribute('data-keywords', autoKeywords);
-                    
-                    newsItem.innerHTML = `
-                        <button class="news-header-btn" onclick="toggleNews(this)">
-                            <span class="news-date ${dateClass}"><i class="fa-regular fa-calendar-days"></i> ${date}</span>
-                            <h3 class="news-headline ${headlineClass}" style="font-size: 14.5px; font-weight: 600;">${headline}</h3>
-                        </button>
-                        <div class="news-content">
-                            <div class="news-content-inner ${contentClass}">
-                                ${imageTag1}
-                                <p>${content}</p>
-                                ${imageTag2}
-                            </div>
-                        </div>
-                    `;
-                    
-                    newsListContainer.appendChild(newsItem);
-
-                    const schemaScript = document.createElement('script');
-                    schemaScript.type = 'application/ld+json';
-                    schemaScript.text = JSON.stringify({
-                        "@context": "https://schema.org",
-                        "@type": "Article",
-                        "headline": headline,
-                        "datePublished": date,
-                        "articleBody": content,
-                        "author": {
-                            "@type": "Person",
-                            "name": "Parthib Das"
-                        }
+                    allArticles.push({
+                        date: row.c[0] ? row.c[0].f || row.c[0].v : '',
+                        headlineBN: row.c[1] ? row.c[1].v : '',
+                        contentBN: row.c[2] ? row.c[2].v : '',
+                        headlineEN: row.c[3] ? row.c[3].v : '',
+                        contentEN: row.c[4] ? row.c[4].v : '',
+                        img1: row.c[5] ? row.c[5].v : '',
+                        img2: row.c[6] ? row.c[6].v : ''
                     });
-                    document.head.appendChild(schemaScript);
                 }
+
+                renderArticles();
 
             } catch (error) {
                 console.error('Error fetching data:', error);
                 document.getElementById('news-list-container').innerHTML = '<div class="loading bn-font" style="color:red;">আর্টিকেল লোড করতে সমস্যা হয়েছে! শিট আইডিটি ঠিক আছে কিনা চেক করুন।</div>';
+            }
+        }
+
+        function renderArticles() {
+            const newsListContainer = document.getElementById('news-list-container');
+            newsListContainer.innerHTML = ''; 
+
+            if(allArticles.length === 0) {
+                newsListContainer.innerHTML = currentLang === 'BN' ? 
+                    '<div class="loading bn-font">কোনো আর্টিকেল পাওয়া যায়নি।</div>' : 
+                    '<div class="loading">No articles found.</div>';
+                return;
+            }
+
+            for (let i = allArticles.length - 1; i >= 0; i--) {
+                const art = allArticles[i];
+                
+                let displayHeadline = currentLang === 'BN' ? art.headlineBN : (art.headlineEN || art.headlineBN);
+                let displayContent = currentLang === 'BN' ? art.contentBN : (art.contentEN || art.contentBN);
+
+                const headlineClass = isBengali(displayHeadline) ? 'bn-font' : '';
+                const contentClass = isBengali(displayContent) ? 'bn-font' : '';
+                const dateClass = isBengali(art.date) ? 'bn-font' : '';
+
+                let imageTag1 = '';
+                if (art.img1 && art.img1.trim() !== '') {
+                    imageTag1 = `<img src="${art.img1}" alt="Research Image" style="width:100%; max-height:220px; object-fit:cover; border-radius:8px; margin-bottom:14px; display:block;">`;
+                }
+
+                let imageTag2 = '';
+                if (art.img2 && art.img2.trim() !== '') {
+                    imageTag2 = `<img src="${art.img2}" alt="Research Image" style="width:100%; max-height:220px; object-fit:cover; border-radius:8px; margin-top:14px; display:block;">`;
+                }
+
+                const autoKeywords = displayHeadline.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").split(" ").join(", ");
+
+                const newsItem = document.createElement('div');
+                newsItem.className = 'news-item';
+                newsItem.setAttribute('data-keywords', autoKeywords);
+                
+                newsItem.innerHTML = `
+                    <button class="news-header-btn" onclick="toggleNews(this)">
+                        <span class="news-date ${dateClass}"><i class="fa-regular fa-calendar-days"></i> ${art.date}</span>
+                        <h3 class="news-headline ${headlineClass}" style="font-size: 14.5px; font-weight: 600;">${displayHeadline}</h3>
+                    </button>
+                    <div class="news-content">
+                        <div class="news-content-inner ${contentClass}">
+                            ${imageTag1}
+                            <p>${displayContent}</p>
+                            ${imageTag2}
+                        </div>
+                    </div>
+                `;
+                
+                newsListContainer.appendChild(newsItem);
             }
         }
 
